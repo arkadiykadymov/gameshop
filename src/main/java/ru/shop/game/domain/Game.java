@@ -67,21 +67,4 @@ public class Game {
                 ", storage_count=" + storage_count +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return Double.compare(game.price, price) == 0 &&
-                storage_count == game.storage_count &&
-                Objects.equals(id, game.id) &&
-                Objects.equals(title, game.title) &&
-                Objects.equals(description, game.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, description, price, storage_count);
-    }
 }

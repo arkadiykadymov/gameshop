@@ -9,7 +9,7 @@ import java.util.Map;
 @Controller
 public class GameController {
 
-    @GetMapping("/greeting")
+    @GetMapping("/")
     public String greeting(
             @RequestParam(name = "name", required = false, defaultValue = "World") String name,
             Map<String, Object> model
