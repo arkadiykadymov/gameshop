@@ -6,11 +6,6 @@
 </head>
 <body>
 <div>Hello, user!</div>
-<div>
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <input type="submit" value="sign out"/>
-    </form>
-</div>
+<a href="/getProductList">Перейти к покупкам</a>
 </body>
 </html>
