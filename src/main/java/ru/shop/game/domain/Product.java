@@ -1,13 +1,10 @@
 package ru.shop.game.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Game {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -17,13 +14,25 @@ public class Game {
     private double price;
     private int storage_count;
 
-    public Game(String title, String description, double price) {
+    @ManyToOne
+    @JoinColumn(name = "purchase_id", nullable = false)
+    private Purchase purchase;
+
+    public Product(String title, String description, double price) {
         this.title = title;
         this.description = description;
         this.price = price;
     }
 
-    public Game() {
+    public Product() {
+    }
+
+    public Purchase getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(Purchase purchase) {
+        this.purchase = purchase;
     }
 
     public String getTitle() {
