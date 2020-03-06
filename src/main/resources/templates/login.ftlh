@@ -1,5 +1,5 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/log.ftl" as l>
+<#import "parts/common.ftlh" as c>
+<#import "parts/log.ftlh" as l>
 
 <@c.page>
 Login page
