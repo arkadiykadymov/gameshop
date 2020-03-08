@@ -7,17 +7,12 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(length = 4000)
     private String title;
     @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
     private double price;
     private int storage_count;
     private String filename;
-
-    @ManyToOne
-    @JoinColumn(name = "purchase_id")
-    private Purchase purchase;
 
     public Product(String title, String description, double price, int s_count) {
         this.title = title;
@@ -43,14 +38,6 @@ public class Product {
 
     public void setFilename(String filename) {
         this.filename = filename;
-    }
-
-    public Purchase getPurchase() {
-        return purchase;
-    }
-
-    public void setPurchase(Purchase purchase) {
-        this.purchase = purchase;
     }
 
     public String getTitle() {
