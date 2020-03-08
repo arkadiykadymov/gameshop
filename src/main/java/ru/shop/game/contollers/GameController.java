@@ -11,11 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.shop.game.domain.Product;
 import ru.shop.game.domain.User;
 import ru.shop.game.repositories.ProductRepository;
+import ru.shop.game.service.PurchaseService;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -27,8 +29,12 @@ public class GameController {
     @Autowired
     private final ProductRepository productRepository;
 
-    public GameController(ProductRepository productRepository) {
+    @Autowired
+    private final PurchaseService purchaseService;
+
+    public GameController(ProductRepository productRepository, PurchaseService purchaseService) {
         this.productRepository = productRepository;
+        this.purchaseService = purchaseService;
     }
 
     @GetMapping("/")
@@ -41,6 +47,11 @@ public class GameController {
         Iterable<Product> products = productRepository.findAll();
         model.put("products", products);
         return "main";
+    }
+
+    @GetMapping("/addProduct")
+    public String adProduct(Map<String, Object> map) {
+        return "addProduct";
     }
 
     @PostMapping("/addProduct")
@@ -69,5 +80,22 @@ public class GameController {
         List<Product> all = productRepository.findAll();
         model.put("products", all);
         return "main";
+    }
+
+    @PostMapping("/buy")
+    public String buyProduct(
+            @AuthenticationPrincipal User user,
+            @RequestParam("prod_id") String prod_id,
+            @RequestParam("count") int count,
+            Map<String, Object> model) {
+        Optional<Product> productOptional = productRepository.findById(Long.valueOf(prod_id));
+        Product product = productOptional.get();
+        if (product.getStorage_count() < count){
+            model.put("errorMessage", "Insert correct product count");
+            return "redirect:/getProductList";
+        }
+        Product buyedProduct = purchaseService.createPurchase(product, user, count);
+        model.put("product", buyedProduct);
+        return "purchaseReport";
     }
 }

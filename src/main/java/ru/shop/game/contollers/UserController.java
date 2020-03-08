@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.shop.game.domain.Role;
 import ru.shop.game.domain.User;
 import ru.shop.game.repositories.UserRepository;
+import ru.shop.game.service.UserService;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -19,15 +20,15 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
     @Autowired
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
     public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "userList";
     }
 
@@ -45,21 +46,7 @@ public class UserController {
             @RequestParam("userId") User user
 
     ) {
-        user.setUsername(username);
-
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-
-        userRepository.save(user);
+        userService.save(user, username, form);
 
         return "redirect:/user";
 

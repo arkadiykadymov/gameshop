@@ -1,37 +1,36 @@
 <#import "parts/common.ftlh" as c>
-<#import "parts/log.ftlh" as l>
 
 <@c.page>
-<div>
-    <@l.logout />
-    <span><a href="/user">User list</a></span>
-</div>
-<div>
-    <form method="post" action="/addProduct" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="Введите название товара" />
-        <input type="text" name="desc" placeholder="Введите описание товара">
-        <input type="text" name="price" placeholder="Введите цену">
-        <input type="text" name="count" placeholder="Введите число">
-        <input type="file" name="file">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <button type="submit">Добавить</button>
-    </form>
-</div>
 <div>Список товаров</div>
-<#list products as p>
-<div>
-    <span>${p.title}</span>
-    <i>${p.description}</i>
-    <strong>${p.price}</strong>
-    <strong>${p.storage_count}</strong>
-    <div>
-        <#if p.filename??>
-            <img src="/img/${p.filename}">
-        </#if>
+
+<div class="card-columns">
+    <#list products as p>
+    <div class="card my-3" style="width: 18rem;">
+        <div>
+            <#if p.filename??>
+            <img class="card-img-top" src="/img/${p.filename}">
+            </#if>
+        </div>
+    <form method="post" action="/buy">
+        <input type="hidden" value="${_csrf.token}" name="_csrf">
+        <input type="hidden" name="prod_id" value="${p.id}">
+        <input type="number" name="count">
+        <div class="card-body">
+        <h5 class="card-title">${p.title}</h5>
+        <p class="card-text">${p.description}</p>
+        <button type="submit" class="btn btn-danger">Buy it</button>
+        <footer class="blockquote-footer">
+            <small>
+                Price: ${p.price}
+                Storage counter: ${p.storage_count}
+            </small>
+        </footer>
     </div>
+    </form>
 </div>
 <#else>
 No products yet
 </#list>
+</div>
 </@c.page>
 

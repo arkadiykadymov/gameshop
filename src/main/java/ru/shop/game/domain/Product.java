@@ -28,6 +28,14 @@ public class Product {
     public Product() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getFilename() {
         return filename;
     }

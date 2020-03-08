@@ -14,11 +14,30 @@ public class Purchase {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User buyer;
-    private Date purchase_date;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
+    private String purchase_date;
     private double purchase_price;
     private int products_count;
 
     public Purchase() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public User getBuyer() {
@@ -29,11 +48,11 @@ public class Purchase {
         this.buyer = buyer;
     }
 
-    public Date getPurchase_date() {
+    public String getPurchase_date() {
         return purchase_date;
     }
 
-    public void setPurchase_date(Date purchase_date) {
+    public void setPurchase_date(String purchase_date) {
         this.purchase_date = purchase_date;
     }
 
