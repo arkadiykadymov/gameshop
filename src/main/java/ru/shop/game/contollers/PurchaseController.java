@@ -54,8 +54,10 @@ public class PurchaseController {
 
     @GetMapping("/getPurchaseList")
     private String getPurchaseList(Map<String, Object> model) {
-        List<Purchase> allPurchases = purchaseService.findAll();
+        List<Purchase> allPurchases = (List<Purchase>) purchaseService.findAll();
         model.put("purchases", allPurchases);
         return "purchaseList";
     }
+
+
 }

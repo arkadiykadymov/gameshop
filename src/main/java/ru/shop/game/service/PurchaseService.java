@@ -11,7 +11,6 @@ import ru.shop.game.repositories.PurchaseRepository;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class PurchaseService {
@@ -41,7 +40,7 @@ public class PurchaseService {
         return productRepository.save(product);
     }
 
-    public List<Purchase> findAll() {
+    public Iterable<Purchase> findAll() {
         return purchaseRepository.findAll();
     }
 }

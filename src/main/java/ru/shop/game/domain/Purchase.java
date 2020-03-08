@@ -11,11 +11,11 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User buyer;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private Product product;
     private String purchase_date;
     private double purchase_price;
