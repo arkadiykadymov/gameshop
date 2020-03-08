@@ -7,8 +7,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @Column(length = 4000)
     private String title;
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
     private double price;
     private int storage_count;

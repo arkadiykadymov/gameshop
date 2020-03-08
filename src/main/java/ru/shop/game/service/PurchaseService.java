@@ -11,7 +11,7 @@ import ru.shop.game.repositories.PurchaseRepository;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class PurchaseService {
@@ -35,8 +35,13 @@ public class PurchaseService {
         purchase.setProducts_count(count);
         purchase.setPurchase_date(dateFormat.format(date));
         purchase.setProduct(product);
+        purchase.setPurchase_price(product.getPrice() * count);
         product.setStorage_count(product.getStorage_count() - count);
         purchaseRepository.save(purchase);
         return productRepository.save(product);
+    }
+
+    public List<Purchase> findAll() {
+        return purchaseRepository.findAll();
     }
 }

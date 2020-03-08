@@ -1,6 +1,10 @@
 <#import "parts/common.ftlh" as c>
 
 <@c.page>
+<h1 style="color:rgb(255,0,0)">
+    ${errorMessage?ifExists}
+</h1>
+
 <div>Список товаров</div>
 
 <div class="card-columns">
@@ -9,16 +13,17 @@
         <div>
             <#if p.filename??>
             <img class="card-img-top" src="/img/${p.filename}">
-            </#if>
-        </div>
-    <form method="post" action="/buy">
-        <input type="hidden" value="${_csrf.token}" name="_csrf">
-        <input type="hidden" name="prod_id" value="${p.id}">
-        <input type="number" name="count">
-        <div class="card-body">
+        </#if>
+    </div>
+    <div class="card-body">
         <h5 class="card-title">${p.title}</h5>
         <p class="card-text">${p.description}</p>
-        <button type="submit" class="btn btn-danger">Buy it</button>
+        <form method="post" action="/buy">
+            <input type="hidden" value="${_csrf.token}" name="_csrf">
+            <input type="hidden" name="prod_id" value="${p.id}">
+            <input type="number" name="count">
+            <button type="submit" class="btn btn-danger">Buy it</button>
+        </form>
         <footer class="blockquote-footer">
             <small>
                 Price: ${p.price}
@@ -26,7 +31,6 @@
             </small>
         </footer>
     </div>
-    </form>
 </div>
 <#else>
 No products yet

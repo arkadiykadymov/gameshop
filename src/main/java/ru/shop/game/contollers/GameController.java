@@ -29,12 +29,8 @@ public class GameController {
     @Autowired
     private final ProductRepository productRepository;
 
-    @Autowired
-    private final PurchaseService purchaseService;
-
     public GameController(ProductRepository productRepository, PurchaseService purchaseService) {
         this.productRepository = productRepository;
-        this.purchaseService = purchaseService;
     }
 
     @GetMapping("/")
@@ -82,20 +78,5 @@ public class GameController {
         return "main";
     }
 
-    @PostMapping("/buy")
-    public String buyProduct(
-            @AuthenticationPrincipal User user,
-            @RequestParam("prod_id") String prod_id,
-            @RequestParam("count") int count,
-            Map<String, Object> model) {
-        Optional<Product> productOptional = productRepository.findById(Long.valueOf(prod_id));
-        Product product = productOptional.get();
-        if (product.getStorage_count() < count){
-            model.put("errorMessage", "Insert correct product count");
-            return "redirect:/getProductList";
-        }
-        Product buyedProduct = purchaseService.createPurchase(product, user, count);
-        model.put("product", buyedProduct);
-        return "purchaseReport";
-    }
+
 }
