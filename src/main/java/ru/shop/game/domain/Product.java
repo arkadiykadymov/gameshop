@@ -1,7 +1,6 @@
 package ru.shop.game.domain;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class Product {
@@ -13,18 +12,28 @@ public class Product {
     private String description;
     private double price;
     private int storage_count;
+    private String filename;
 
     @ManyToOne
-    @JoinColumn(name = "purchase_id", nullable = false)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    public Product(String title, String description, double price) {
+    public Product(String title, String description, double price, int s_count) {
         this.title = title;
         this.description = description;
         this.price = price;
+        this.storage_count = s_count;
     }
 
     public Product() {
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public Purchase getPurchase() {

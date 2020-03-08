@@ -2,5 +2,5 @@
 
 <@c.page>
 <div>Hello, user</div>
-<a href="/getProductsList">Main page</a>
+<a href="/getProductList">Main page</a>
 </@c.page>

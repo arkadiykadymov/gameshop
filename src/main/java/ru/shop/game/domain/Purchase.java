@@ -17,8 +17,6 @@ public class Purchase {
     private Date purchase_date;
     private double purchase_price;
     private int products_count;
-    @OneToMany(mappedBy = "purchase")
-    private Set<Product> products;
 
     public Purchase() {
     }
@@ -55,11 +53,4 @@ public class Purchase {
         this.products_count = products_count;
     }
 
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
 }
