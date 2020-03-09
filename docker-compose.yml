@@ -1,0 +1,31 @@
+version: '3.2'
+services:
+  docker_db:
+    container_name: docker_db
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_DATABASE: gameshop
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+    ports:
+      - "3306:3306"
+    networks:
+      - my_new_net
+
+  my_app:
+    container_name: docker_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - docker_db
+    networks:
+      - my_new_net
+
+networks:
+  my_new_net:
+    driver: bridge

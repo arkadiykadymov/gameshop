@@ -22,7 +22,7 @@
             </div>
         </div>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <button type="submit">Сохранить</button>
+        <button type="submit">Save</button>
     </form>
 </div>
 </@c.page>

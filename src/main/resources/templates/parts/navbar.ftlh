@@ -17,10 +17,10 @@
             </li>
             <#if isAdmin>
             <li class="nav-item">
-                <a class="nav-link" href="/user">Users</a>
+                <a class="nav-link" href="/user">User list</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/addProduct">Add prod</a>
+                <a class="nav-link" href="/addProduct">Add product</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/getPurchaseList">Purchases</a>

@@ -6,7 +6,7 @@
     ${errorMessage?ifExists}
 </h1>
 
-<div>Список товаров</div>
+<h2>Products</h2>
 
 <div class="card-columns">
     <#list products as p>
@@ -22,7 +22,7 @@
         <form method="post" action="/buy">
             <input type="hidden" value="${_csrf.token}" name="_csrf">
             <input type="hidden" name="prod_id" value="${p.id}">
-            <input type="number" name="count">
+            <input type="number" name="count" required>
             <button type="submit" class="btn btn-danger">Buy it</button>
         </form>
         <#if isAdmin>

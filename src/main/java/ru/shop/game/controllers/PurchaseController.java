@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Controller
 public class PurchaseController {
-    private static final Logger logger = LogManager.getLogger(PurchaseController.class);
+
     @Autowired
     private final ProductRepository productRepository;
     @Autowired
@@ -31,6 +31,8 @@ public class PurchaseController {
         this.productRepository = productRepository;
         this.purchaseService = purchaseService;
     }
+
+    private static final Logger logger = LogManager.getLogger(PurchaseController.class);
 
 
     @PostMapping("/buy")
@@ -62,9 +64,8 @@ public class PurchaseController {
     }
 
     @GetMapping("/getPurchaseList")
-    @PreAuthorize("hasAuthority('ADMIN')")
     private String getPurchaseList(Map<String, Object> model) {
-        List<Purchase> allPurchases = (List<Purchase>) purchaseService.findAll();
+        List<Purchase> allPurchases = purchaseService.findAll();
         model.put("purchases", allPurchases);
         return "purchaseList";
     }

@@ -94,7 +94,6 @@ public class GameController {
     }
 
     @PostMapping("/delete")
-    @PreAuthorize("hasAuthority('ADMIN')")
     private String deleteProduct(
             @RequestParam("prod_id") String prod_id,
             Map<String, Object> model) {
@@ -111,7 +110,6 @@ public class GameController {
     }
 
     @GetMapping("/edit/{product}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     private String editProduct(
             @PathVariable("product") String prod_id,
             Map<String, Object> model) {
@@ -125,7 +123,6 @@ public class GameController {
     }
 
     @PostMapping("/edit/{product}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     private String saveEditing(
             @PathVariable("product") String prod_id,
             @RequestParam String title,
