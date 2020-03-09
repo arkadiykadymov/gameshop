@@ -1,9 +1,10 @@
-package ru.shop.game.contollers;
+package ru.shop.game.controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,23 +82,36 @@ public class GameController {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
             product.setFilename(resultFileName);
         }
-        productService.save(product);
+        try {
+            productService.save(product);
+            logger.debug("Created new product " + product);
+        } catch (Exception e) {
+            logger.error("Error while saving product " + product + "---- ERROR: " +  e);
+        }
         List<Product> all = (List<Product>) productService.findAll();
         model.put("products", all);
         return "main";
     }
 
     @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
     private String deleteProduct(
             @RequestParam("prod_id") String prod_id,
             Map<String, Object> model) {
-        purchaseService.delete(purchaseService.findByProductId(Long.valueOf(prod_id)));
+        try {
+            productService.deleteById(prod_id);
+            logger.debug("Product # " + prod_id + " successfully deleted");
+
+        } catch (Exception e){
+            logger.error("Error while deleting product " + prod_id + "---- ERROR: " +  e);
+        }
         Iterable<Product> products = productService.findAll();
         model.put("products", products);
         return "main";
     }
 
     @GetMapping("/edit/{product}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     private String editProduct(
             @PathVariable("product") String prod_id,
             Map<String, Object> model) {
@@ -111,6 +125,7 @@ public class GameController {
     }
 
     @PostMapping("/edit/{product}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     private String saveEditing(
             @PathVariable("product") String prod_id,
             @RequestParam String title,
@@ -137,7 +152,13 @@ public class GameController {
                 file.transferTo(new File(uploadPath + "/" + resultFileName));
                 product.setFilename(resultFileName);
             }
-            productService.save(product);
+            try {
+                productService.save(product);
+                logger.debug("Product " + product + " successfully editted");
+
+            }catch (Exception e){
+
+            }
         }
         List<Product> all = (List<Product>) productService.findAll();
         model.put("products", all);

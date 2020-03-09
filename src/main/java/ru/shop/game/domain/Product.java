@@ -1,6 +1,7 @@
 package ru.shop.game.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -13,6 +14,10 @@ public class Product {
     private double price;
     private int storage_count;
     private String filename;
+
+    @OneToMany(mappedBy = "product",
+            cascade = CascadeType.ALL)
+    private Set<Purchase> purchaseSet;
 
     public Product(String title, String description, double price, int s_count) {
         this.title = title;
@@ -70,6 +75,14 @@ public class Product {
 
     public void setStorage_count(int storage_count) {
         this.storage_count = storage_count;
+    }
+
+    public Set<Purchase> getPurchaseSet() {
+        return purchaseSet;
+    }
+
+    public void setPurchaseSet(Set<Purchase> purchaseSet) {
+        this.purchaseSet = purchaseSet;
     }
 
     @Override

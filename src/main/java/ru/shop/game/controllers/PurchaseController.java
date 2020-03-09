@@ -1,6 +1,9 @@
-package ru.shop.game.contollers;
+package ru.shop.game.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +21,7 @@ import java.util.Optional;
 
 @Controller
 public class PurchaseController {
-
+    private static final Logger logger = LogManager.getLogger(PurchaseController.class);
     @Autowired
     private final ProductRepository productRepository;
     @Autowired
@@ -37,6 +40,7 @@ public class PurchaseController {
             @RequestParam("count") int count,
             Map<String, Object> model) {
         Optional<Product> productOptional = productRepository.findById(Long.valueOf(prod_id));
+        Object buyedProduct = null;
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             if (product.getStorage_count() < count) {
@@ -45,7 +49,12 @@ public class PurchaseController {
                 model.put("products", products);
                 return "main";
             }
-            Product buyedProduct = purchaseService.createPurchase(product, user, count);
+            try {
+                buyedProduct = purchaseService.createPurchase(product, user, count);
+                logger.debug("Success purchase " + buyedProduct);
+            } catch (Exception e) {
+                logger.error("Error while buying product " + product);
+            }
             model.put("product", buyedProduct);
             return "purchaseReport";
         }
@@ -53,6 +62,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/getPurchaseList")
+    @PreAuthorize("hasAuthority('ADMIN')")
     private String getPurchaseList(Map<String, Object> model) {
         List<Purchase> allPurchases = (List<Purchase>) purchaseService.findAll();
         model.put("purchases", allPurchases);

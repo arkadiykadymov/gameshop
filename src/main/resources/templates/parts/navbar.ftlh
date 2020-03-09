@@ -22,6 +22,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/addProduct">Add prod</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getPurchaseList">Purchases</a>
+            </li>
         </#if>
         </ul>
         <div class="navbar-tet mr-3">${name}</div>
