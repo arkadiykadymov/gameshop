@@ -14,7 +14,7 @@ public class Purchase {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User buyer;
-    @OneToOne(fetch = FetchType.LAZY,
+    @ManyToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Product product;
     private String purchase_date;

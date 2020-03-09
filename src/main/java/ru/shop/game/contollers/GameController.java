@@ -1,5 +1,7 @@
 package ru.shop.game.contollers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.shop.game.domain.Product;
 import ru.shop.game.domain.User;
-import ru.shop.game.repositories.ProductRepository;
+import ru.shop.game.service.ProductService;
 import ru.shop.game.service.PurchaseService;
 
 import java.io.File;
@@ -24,14 +26,20 @@ import java.util.UUID;
 @Controller
 public class GameController {
 
+    private static final Logger logger = LogManager.getLogger(GameController.class);
+
     @Value("${upload.path}")
     private String uploadPath;
 
     @Autowired
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public GameController(ProductRepository productRepository, PurchaseService purchaseService) {
-        this.productRepository = productRepository;
+    @Autowired
+    final PurchaseService purchaseService;
+
+    public GameController(ProductService productService, PurchaseService purchaseService) {
+        this.productService = productService;
+        this.purchaseService = purchaseService;
     }
 
     @GetMapping("/")
@@ -41,7 +49,7 @@ public class GameController {
 
     @GetMapping("/getProductList")
     public String productList(Map<String, Object> model) {
-        Iterable<Product> products = productRepository.findAll();
+        Iterable<Product> products = productService.findAll();
         model.put("products", products);
         return "main";
     }
@@ -73,8 +81,8 @@ public class GameController {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
             product.setFilename(resultFileName);
         }
-        productRepository.save(product);
-        List<Product> all = (List<Product>) productRepository.findAll();
+        productService.save(product);
+        List<Product> all = (List<Product>) productService.findAll();
         model.put("products", all);
         return "main";
     }
@@ -83,8 +91,8 @@ public class GameController {
     private String deleteProduct(
             @RequestParam("prod_id") String prod_id,
             Map<String, Object> model) {
-        productRepository.deleteById(Long.valueOf(prod_id));
-        Iterable<Product> products = productRepository.findAll();
+        purchaseService.delete(purchaseService.findByProductId(Long.valueOf(prod_id)));
+        Iterable<Product> products = productService.findAll();
         model.put("products", products);
         return "main";
     }
@@ -94,7 +102,7 @@ public class GameController {
             @PathVariable("product") String prod_id,
             Map<String, Object> model) {
         Product product = null;
-        Optional<Product> optionalProduct = productRepository.findById(Long.valueOf(prod_id));
+        Optional<Product> optionalProduct = productService.findById(Long.valueOf(prod_id));
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
             model.put("productEdit", product);
@@ -112,7 +120,7 @@ public class GameController {
             @RequestParam("file") MultipartFile file,
             Map<String, Object> model) throws IOException {
         Product product = null;
-        Optional<Product> optionalProduct = productRepository.findById(Long.valueOf(prod_id));
+        Optional<Product> optionalProduct = productService.findById(Long.valueOf(prod_id));
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
             product.setTitle(title);
@@ -129,9 +137,9 @@ public class GameController {
                 file.transferTo(new File(uploadPath + "/" + resultFileName));
                 product.setFilename(resultFileName);
             }
-            productRepository.save(product);
+            productService.save(product);
         }
-        List<Product> all = (List<Product>) productRepository.findAll();
+        List<Product> all = (List<Product>) productService.findAll();
         model.put("products", all);
         return "main";
     }

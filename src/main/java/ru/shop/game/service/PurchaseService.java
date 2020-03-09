@@ -43,4 +43,12 @@ public class PurchaseService {
     public Iterable<Purchase> findAll() {
         return purchaseRepository.findAll();
     }
+
+    public Purchase findByProductId(Long id) {
+        return purchaseRepository.findByProductId(id);
+    }
+
+    public void delete(Purchase purchase) {
+        purchaseRepository.delete(purchase);
+    }
 }
